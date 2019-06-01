@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pt-br" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+  </head>
+  <body>
+    <div class="container">
+      <div class="esquerda">
+        <ul class="jogo">
+          <li class="item">1</li>
+          <li class="item">2</li>
+          <li class="item">3</li>
+          <li class="item">4</li>
+          <li class="item">5</li>
+          <li class="item">6</li>
+          <li class="item">7</li>
+          <li class="item">8</li>
+          <li class="item">9</li>
+          <li class="item">10</li>
+        </ul>
+        <div class="botoes">
+          <input id="nome" type="text" name="nome" placeholder="Nome" value="" />
+          <input id="animacao" type="button" name="jogar" onclick="play()" value="Iniciar"/>
+        </div>
+      </div><!--fim da esqueda -->
+      <div class="direita">
+        <div class="resultados">
+          <div class="header-resultados">
+            Últimos Resultados
+          </div>
+          <div class="conteudo-resultados">
+            <div class="row">
+              <div class="row-esquerda tlr">Nome</div>
+              <div class="row-direita tlr">Resultado</div>
+            </div><!-- fim da row titulo -->
+
+          </div><!-- fim dos conteudos -->
+        </div><!-- fim dos resultados -->
+      </div><!-- fim da direita -->
+    </div><!-- fim do container -->
+
+  </body>
+<script type="text/javascript">
+  function play(){
+    var nome = $("#nome").val();
+    console.log(nome);
+    $.ajax({
+      url: 'jogar.php',
+      type: 'post',
+      data: ({nome: nome}),
+      success: function(data){
+        console.log(data);
+        console.log(data[0].hash);
+        animacao(data);
+      }
+    });
+  }
+
+function resultado(resp){
+  var audio = new Audio('./sons/sound.mp3');
+  var win = new Audio('./sons/win.mp3');
+  let k = 0;
+  var res = setInterval(function(){
+    $(".active").removeClass("active");
+    $(".item:eq("+k+")").addClass("active");
+    audio.play();
+    if (resp == k){
+      clearInterval(res);
+      win.play();
+      $("#animacao").prop('disabled', false);
+      addtabela();
+    } else {
+
+      k++;
+    }
+  }, 1000);
+}
+
+  function animacao(a){
+    $("#animacao").prop('disabled', true);
+    var audio = new Audio('./sons/sound.mp3');
+    var j = 0;
+    var rodando = setInterval(function(){
+      $(".active").removeClass("active");
+      $(".item:eq("+j+")").addClass("active");
+      audio.play();
+      if (j == 9){
+        j = 0;
+      } else {
+        j++;
+      }
+    }, 500);
+    setTimeout(function(){ clearInterval(rodando); resultado(a); }, 10000);
+  }
+
+  function tabela(){
+    $.ajax({
+      url: 'resultados.php',
+      dataType: 'json',
+      success: function(data){
+        console.log(data);
+        for (i=0; i<data.length; i++){
+          novoResultado = '<div class="row">';
+          novoResultado += '<div class="row-esquerda">'+data[i].nome+'</div>';
+          novoResultado += '<div class="row-direita">'+data[i].resultado+'</div>';
+          novoResultado += '</div>';
+          $(".conteudo-resultados").append(novoResultado);
+        }
+      }
+    })
+  }
+  function addtabela(){
+    $.ajax({
+      url: 'resultados.php',
+      dataType: 'json',
+      success: function(data){
+        console.log(data);
+          novoResultado = '<div class="row">';
+          novoResultado += '<div class="row-esquerda">'+data[0].nome+'</div>';
+          novoResultado += '<div class="row-direita">'+data[0].resultado+'</div>';
+          novoResultado += '</div>';
+          $(".row:eq(0)").after(novoResultado);
+      }
+    })
+  }
+
+$(function(){
+  tabela();
+})
+  /*for(i=0; i<10; i++){
+  console.log(Math.floor(Math.random()*10 + 1));
+}*/
+</script>
+
+
+</html>
