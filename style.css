@@ -1,5 +1,4 @@
 @import url('https://fonts.googleapis.com/css?family=Montserrat');
-
 .jogo{
   padding: 0;
   margin: 0;
@@ -143,23 +142,20 @@ input[type=button]{
   justify-content: space-evenly;
   flex-flow: row wrap;
 }
- /*scroll*/
-/* width */
+
+/* scroll */
 ::-webkit-scrollbar {
   width: 4px;
 }
 
-/* Track */
+
 ::-webkit-scrollbar-track {
   background: transparent;
 }
-
-/* Handle */
 ::-webkit-scrollbar-thumb {
   background: #e74c3c;
 }
 
-/* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #c0392b;
 }

@@ -61,26 +61,24 @@
     });
   }
 
-function resultado(resp){
-  var audio = new Audio('./sons/sound.mp3');
-  var win = new Audio('./sons/win.mp3');
-  let k = 0;
-  var res = setInterval(function(){
-    $(".active").removeClass("active");
-    $(".item:eq("+k+")").addClass("active");
-    audio.play();
-    if (resp == k){
-      clearInterval(res);
-      win.play();
-      $("#animacao").prop('disabled', false);
-      addtabela();
-    } else {
-
-      k++;
-    }
-  }, 1000);
-}
-
+  function resultado(resp){
+    var audio = new Audio('./sons/sound.mp3');
+    var win = new Audio('./sons/win.mp3');
+    let k = 0;
+    var res = setInterval(function(){
+      $(".active").removeClass("active");
+      $(".item:eq("+k+")").addClass("active");
+      audio.play();
+      if (resp == k){
+        clearInterval(res);
+        win.play();
+        $("#animacao").prop('disabled', false);
+        addtabela();
+      } else {
+        k++;
+      }
+    }, 1000);
+  }
   function animacao(a){
     $("#animacao").prop('disabled', true);
     var audio = new Audio('./sons/sound.mp3');
@@ -97,7 +95,6 @@ function resultado(resp){
     }, 500);
     setTimeout(function(){ clearInterval(rodando); resultado(a); }, 10000);
   }
-
   function tabela(){
     $.ajax({
       url: 'resultados.php',
@@ -129,13 +126,9 @@ function resultado(resp){
     })
   }
 
-$(function(){
-  tabela();
-})
-  /*for(i=0; i<10; i++){
-  console.log(Math.floor(Math.random()*10 + 1));
-}*/
-</script>
-
-
+  $(function(){
+    tabela();
+  })
+  
+  </script>
 </html>
